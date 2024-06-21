@@ -1,56 +1,47 @@
 using Newtonsoft.Json;
-
+using activities.api.Data;
+using activities.api.Models;
+using Microsoft.EntityFrameworkCore;
 namespace activities.api.Repositories
 {
-    public class ActivityRepository
+    public class ActivityRepository : IActivityRepository
     {
-        private readonly string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "activities.json");
-
-        public List<Activity> GetActivities()
+        private readonly ActivitiesDbContext _context;
+        public ActivityRepository(ActivitiesDbContext context)
         {
-            if(!File.Exists(_filePath))
-            {
-                return new List<Activity>();
-            }
-
-            var json = File.ReadAllText(_filePath);
-            return JsonConvert.DeserializeObject<List<Activity>>(json)!;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void SaveActivities(List<Activity> activities)
+        public async Task<IEnumerable<Activity>> GetActivitiesAsync()
         {
-            var json = JsonConvert.SerializeObject(activities, Formatting.Indented);
-            File.WriteAllText(_filePath, json);
+            return await _context.Activities.ToListAsync();
         }
 
-        public void AddActivity(Activity activity)
+        public async Task<Activity> GetActivityAsync(int id)
         {
-            var activities = GetActivities();
-            activity.Id = activities.Any() ? activities.Max(a => a.Id) + 1 : 1;
-            activities.Add(activity);
-            SaveActivities(activities);
+            return await _context.Activities.Where(a => a.Id == id).FirstOrDefaultAsync()
+                                            .ConfigureAwait(true);
         }
 
-        public void UpdateActivity(Activity activity)
+        public async Task<Activity> CreateActivityAsync(Activity activity)
         {
-            var activities = GetActivities();
-            var existingActivity = activities.FindIndex(a => a.Id == activity.Id);
-            if(existingActivity != -1)
-            {
-                activities[existingActivity] = activity;
-                SaveActivities(activities);
-            }
+            _context.Activities.Add(activity);
+            await _context.SaveChangesAsync();
+            return activity;
         }
 
-        public void DeleteActivity(int id)
+        public async Task<int> UpdateActivityAsync(Activity activity)
         {
-            var activities = GetActivities();
-            var existingActivity = activities.FirstOrDefault(a => a.Id == id);
-            if(existingActivity != null)
-            {
-                activities.Remove(existingActivity);
-                SaveActivities(activities);
-            }
+            _context.Activities.Update(activity);
+            return await _context.SaveChangesAsync();
+            
+        }
+
+        public async Task<int> DeleteActivityAsync(int id)
+        {
+            var activity = await GetActivityAsync(id);
+            _context.Activities.Remove(activity);
+            return await _context.SaveChangesAsync();
         }
     }
 }

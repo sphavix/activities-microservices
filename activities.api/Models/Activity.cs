@@ -1,4 +1,4 @@
-namespace activities.api
+namespace activities.api.Models
 {
     public class Activity
     {
