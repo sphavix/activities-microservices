@@ -12,8 +12,8 @@ using activities.api.Data;
 namespace activities.api.Migrations
 {
     [DbContext(typeof(ActivitiesDbContext))]
-    [Migration("20240621104641_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240623121711_InitalCreate")]
+    partial class InitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

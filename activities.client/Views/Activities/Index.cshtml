@@ -1,0 +1,56 @@
+﻿@model IEnumerable<activities.client.Models.Activity>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add Item</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Last Modified</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @if (item.IsCompleted == true)
+                {
+                    <span style="color: green;">Completed</span>
+                }
+                else
+                {
+
+                    <span style="color: red;">Not Completed</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-md btn-warning">Edit</a>
+                
+            </td>|
+            <td>
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-md btn-danger">Remove</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
