@@ -37,12 +37,20 @@ namespace activities.client.Services
             return JsonConvert.DeserializeObject<Activity>(await response.Content.ReadAsStringAsync())!;
         }
 
-        public async Task UpdateActivity(int id, Activity activity)
+        public async Task<Activity> UpdateActivity(int id, Activity activity)
         {
             var jsonData = JsonConvert.SerializeObject(activity);
             var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"http://localhost:5131/api/activities/{id}", content);
-            response.EnsureSuccessStatusCode();
+            
+            if(response.IsSuccessStatusCode)
+            {
+                var updatedActivity = response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Activity>(await updatedActivity)!;
+            }
+            else{
+                throw new Exception($"Failed to update product: {response.StatusCode}");
+            }
         }
 
         public async Task DeleteActivity(int id)

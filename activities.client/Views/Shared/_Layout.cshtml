@@ -32,6 +32,22 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @{
+                var errorMessage = TempData["errorMessage"]?.ToString();
+                var successMessage = TempData["successMessage"]?.ToString();
+            }
+            @if(!string.IsNullOrWhiteSpace(@successMessage))
+            {
+                <div class="alert alert-success">
+                    <b>Success: </b>@successMessage
+                    <button type="button" class="btn btn-sm btn-close fload-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }else if(!string.IsNullOrWhiteSpace(errorMessage)){
+                <div class="alert alert-danger">
+                    <b>Error: </b>@successMessage
+                    <button type="button" class="btn btn-sm btn-close fload-end" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>
