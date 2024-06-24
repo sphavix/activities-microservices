@@ -1,0 +1,61 @@
+<div class="card">
+    <div class="card-header">
+        <h3>TODO List</h3>
+    </div>
+
+    <div class="card-body">
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" id="txtTitle" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input class="form-control" id="txtDesciption" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Completed</label>
+                    <input class="form-check-input" type="checkbox" id="chkCompleted" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input class="form-control" type="date" id="dtDate" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <a onclick="SaveItems()" class="btn btn-md btn success">Submit</a>
+    </div>
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" />
+<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    
+
+    function SaveItems(){
+
+        var isProcessed =true;
+        var _title = $('#txtTitle');
+        var _description = $('#txtDescription');
+        var _isCompleted = $('#chkCompleted');
+        var _dateCreated = $('#dtDate');
+        
+        var title = _title.val();
+        var description = _description.val();
+        var isCompleted = _isCompleted.val();
+        var dateCreated = _dateCreated.val();
+    }
+</script>

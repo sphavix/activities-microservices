@@ -1,0 +1,66 @@
+<div class="card">
+    <div class="card-header">
+        <h3>TODO List</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="card-title">
+            <a asp-controller="Items" asp-action="Create" class="btn btn-md btn-primary">Add Item</a>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered" id="tblItems">
+                    <thead>
+                        <tr>
+                            <td>Title</td>
+                            <td>Description</td>
+                            <td>Status</td>
+                            <td>Last Modified</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" />
+<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+<script type="text/javascript">
+    var js = jQuery.noConflict(true);
+    js(document).ready(function(){
+        LoadItems()
+    });
+
+    function LoadItems(){
+        tabledata = [];
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:5131/api/activities',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function(data){
+                var _edit = "<a class='btn btn-sm btn-warning' onclick='EditItem(this)'>Edit</a>"
+                var _remove = "<a class='btn btn-sm btn-danger' onclick='RemoveItem(this)'>Remove</a>"
+                var _action = _edit + " " + _remove;
+                $.each(data, function(key, value){
+                    
+                    tabledata .push([value.title, value.description, value.isCompleted, value.createdAt, _action])
+                })
+            },
+            failure: function(error){
+
+            }
+        })
+        js('#tblItems').DataTable({
+            data: tabledata
+        })
+    }
+</script>
