@@ -1,0 +1,135 @@
+<div class="card">
+    <div class="card-header">
+        <h3>Edit TODO</h3>
+    </div>
+
+    <div class="card-body">
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <input hidden="id" id="txtid" value="@ViewData["id"]" />
+                </div>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input class="form-control" id="txtTitle" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input class="form-control" id="txtDesciption" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Completed</label>
+                    <input class="form-check-input" type="checkbox" id="chkCompleted" />
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input class="form-control" type="date" id="dtDate" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <a onclick="SaveItems()" class="btn btn-md btn success">Submit</a>
+        <a asp-controller="Items" asp-action="Index" class="btn btn-md btn-default">Cancel</a>
+    </div>
+</div>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" />
+<script type="text/javascript" charset="utf-8" src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var id = $('#txtid').val();
+        if(id!='' && id!=null){
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:5131/api/activities/GetActivity?id='+id,
+                data: JSON.stringify(_obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function(data){
+                    if(data != null){
+                        $('#txtTitle').val(data.title);
+                        $('#txtDescription').val(data.description);
+                        $('dtDate').val(data.dateCreated)
+                    }
+                }
+            })
+        }
+    })
+
+    function SaveItems(){
+        var isProcess = true;
+
+        var _title = $('#txtTitle');
+        var _description = $('#txtDescription');
+        var _dateCreated = $('dtDate');
+
+        var title = _title.val();
+        var description = _description.val();
+        var dateCreated = _dateCreated.val();
+
+        if(title==null || title==''){
+            _title.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _title.css('border-color','#ccc');
+        }
+
+        if(description==null || description==''){
+            _description.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _description.css('border-color','#ccc');
+        }
+
+        if(dateCreated==null || dateCreated==''){
+            _dateCreated.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _title.css('border-color','#ccc');
+        }
+
+        if(isProcessed){
+            var _obj = new Object();
+
+            _obj.title=title;
+            _obj.description=description;
+            _obj.isCompleted=isCompleted;
+            _obj.dateCreated=dateCreated;
+
+
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:5131/api/activities/UpdateActivity?id='+id,
+                data: JSON.stringify(_obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function(data){
+                    if(data.responseCode==200){
+                        window.location.href='/items';
+                        alert('Activity Saved Successfully')
+                    }else{
+                        alert('Operation failed')
+                    }
+                },
+                failure: function(error){
+
+                }
+            })
+        }
+    }
+
+
+
+</script>

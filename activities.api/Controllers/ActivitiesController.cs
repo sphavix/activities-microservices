@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace activities.api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
     {

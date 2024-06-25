@@ -47,11 +47,12 @@
             dataType: "json",
             async: false,
             success: function(data){
-                var _edit = "<a class='btn btn-sm btn-warning' onclick='EditItem(this)'>Edit</a>"
-                var _remove = "<a class='btn btn-sm btn-danger' onclick='RemoveItem(this)'>Remove</a>"
-                var _action = _edit + " " + _remove;
+               
                 $.each(data, function(key, value){
-                    
+                    var _edit = "<a class='btn btn-sm btn-warning' onclick='EditItem(this)'>Edit</a>"
+                    var _remove = "<a class='btn btn-sm btn-danger' onclick='RemoveItem(this)'>Remove</a>"
+                    var _hdn = "<input id='hdnid' type='hidden' value=" + value.id + "></input>"
+                    var _action = _hdn + _edit + " | " + _remove;
                     tabledata .push([value.title, value.description, value.isCompleted, value.createdAt, _action])
                 })
             },
@@ -61,6 +62,41 @@
         })
         js('#tblItems').DataTable({
             data: tabledata
+        })
+    }
+
+    function EditItem(element){
+        var id = $(element).closest('tr').find('#hdnid').val();
+        window.location.href = '/items/Edit/?id='+id
+    }
+
+    function RemoveItem(element){
+        var id = $(element).closest('tr').find('#hdnid').val();
+        if(confirm('Do you want to remove this item?')){
+            proceedRemove(id)
+        }
+    }
+
+    function proceedRemove(id){
+        $.ajax({
+            type: 'DELETE',
+            url: 'http://localhost:5131/api/activities/DeleteActivity?id='+id,
+            data: JSON.stringify(_obj),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            async: false,
+            success: function(data){
+                debugger;
+                if(data.responseCode == 200){
+                    window.location.href = '/items';
+                    alert('Item removed successfully!')
+                }else{
+                    alert('Operation failed!')
+                }
+            },
+            failure: function(error){
+                
+            }
         })
     }
 </script>

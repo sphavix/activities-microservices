@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h3>TODO List</h3>
+        <h3>Create TODO</h3>
     </div>
 
     <div class="card-body">
@@ -31,7 +31,8 @@
     </div>
 
     <div class="card-footer">
-        <a onclick="SaveItems()" class="btn btn-md btn success">Submit</a>
+        <a onclick="SaveItems()" class="btn btn-md btn-success">Submit</a>
+        <a asp-controller="Items" asp-action="Index" class="btn btn-md btn-primary">Cancel</a>
     </div>
 </div>
 
@@ -55,7 +56,58 @@
         
         var title = _title.val();
         var description = _description.val();
-        var isCompleted = _isCompleted.val();
         var dateCreated = _dateCreated.val();
+
+        if(title==null || title==''){
+            _title.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _title.css('border-color','#ccc');
+        }
+
+        if(description==null || description==''){
+            _description.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _description.css('border-color','#ccc');
+        }
+
+        if(dateCreated==null || dateCreated==''){
+            _dateCreated.css('border-color','red');
+            isProcessed=false;
+        }else{
+            _title.css('border-color','#ccc');
+        }
+
+
+        if(isProcessed){
+            var _obj = new Object();
+
+            _obj.title=title;
+            _obj.description=description;
+            _obj.isCompleted=isCompleted;
+            _obj.dateCreated=dateCreated;
+
+
+            $.ajax({
+                type: 'POST',
+                url: 'http://localhost:5131/api/activities/CreateActivity',
+                data: JSON.stringify(_obj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function(data){
+                    if(data.responseCode==201){
+                        window.location.href='/items';
+                        alert('Activity Saved Successfully')
+                    }else{
+                        alert('Operation failed')
+                    }
+                },
+                failure: function(error){
+
+                }
+            })
+        }
     }
 </script>

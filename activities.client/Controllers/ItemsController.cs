@@ -14,8 +14,9 @@ namespace activities.client.Controllers
             return View();
         }
 
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
+            ViewData["Id"] = id;
             return View();
         }
     }
