@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddHttpClient<ActivitiesService>();
+builder.Services.AddScoped<APIGatewayService>();
 
 var app = builder.Build();
 

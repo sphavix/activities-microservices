@@ -26,7 +26,7 @@ namespace activities.api.CQRS.Handlers
             activity.IsCompleted = command.IsCompleted;
             activity.CreatedAt = DateTime.UtcNow;
 
-            await _repository.UpdateActivityAsync(activity);
+            await _repository.UpdateActivityAsync(activity.Id, activity);
             return activity.Id;
         }
     }

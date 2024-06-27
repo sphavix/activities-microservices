@@ -30,7 +30,7 @@ namespace activities.api.Repositories
             return activity;
         }
 
-        public async Task<int> UpdateActivityAsync(Activity activity)
+        public async Task<int> UpdateActivityAsync(int id, Activity activity)
         {
             _context.Activities.Update(activity);
             return await _context.SaveChangesAsync();
